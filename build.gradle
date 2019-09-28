@@ -1,16 +1,39 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+}
+
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.3.50'
 }
+
 repositories {
+    google()
+    jcenter()
     mavenCentral()
 }
+
 group 'com.example'
 version '0.0.1'
 
 apply plugin: 'maven-publish'
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+}
 
 kotlin {
     jvm()
+
+    android()
+
     // This is for iPhone emulator
     // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
     iosX64("ios") {
@@ -18,6 +41,7 @@ kotlin {
             framework()
         }
     }
+
     sourceSets {
         commonMain {
             dependencies {
@@ -36,6 +60,17 @@ kotlin {
             }
         }
         jvmTest {
+            dependencies {
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation kotlin('stdlib')
+            }
+        }
+        androidTest {
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
