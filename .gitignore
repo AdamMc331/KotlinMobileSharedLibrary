@@ -1,4 +1,8 @@
-.idea/
+.idea/*.xml
+.idea/artifacts/
+.idea/libraries
+.idea/modules
+.idea/.name
 build/
 .gradle/
 local.properties
