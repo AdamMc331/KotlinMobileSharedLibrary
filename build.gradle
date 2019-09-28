@@ -40,7 +40,7 @@ kotlin {
     // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
     iosX64("ios") {
         binaries {
-            framework("MyFramework")
+            framework(project.name)
         }
     }
 
@@ -83,16 +83,6 @@ kotlin {
         iosTest {
         }
     }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                groupId = project.group
-                artifactId = 'multiplatform-project'
-                version = project.version
-            }
-        }
-    }
 }
 
 task iosTest {
@@ -112,7 +102,7 @@ task iosTest {
 task packForXcode(type: Sync) {
     final File frameworkDir = new File(buildDir, "xcode-frameworks")
     final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
-    final def framework = kotlin.targets.ios.binaries.getFramework("MyFramework", mode)
+    final def framework = kotlin.targets.ios.binaries.getFramework(project.name, mode)
 
     inputs.property "mode", mode
     dependsOn framework.linkTask
