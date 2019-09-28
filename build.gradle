@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
 }
 
-group 'com.example'
+group 'com.mycompany'
 version '0.0.1'
 
 apply plugin: 'maven-publish'
@@ -32,13 +32,15 @@ android {
 kotlin {
     jvm()
 
-    android()
+    android {
+        publishAllLibraryVariants()
+    }
 
     // This is for iPhone emulator
     // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
     iosX64("ios") {
         binaries {
-            framework()
+            framework("MyFramework")
         }
     }
 
@@ -81,6 +83,16 @@ kotlin {
         iosTest {
         }
     }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = project.group
+                artifactId = 'multiplatform-project'
+                version = project.version
+            }
+        }
+    }
 }
 
 task iosTest {
@@ -96,6 +108,27 @@ task iosTest {
         }
     }
 }
+
+task packForXcode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.ios.binaries.getFramework("MyFramework", mode)
+
+    inputs.property "mode", mode
+    dependsOn framework.linkTask
+
+    from { framework.outputFile.parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+
+tasks.build.dependsOn packForXcode
 
 configurations {
     compileClasspath
