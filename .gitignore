@@ -3,6 +3,7 @@
 .idea/libraries
 .idea/modules
 .idea/.name
+.idea/caches/
 build/
 .gradle/
 local.properties
