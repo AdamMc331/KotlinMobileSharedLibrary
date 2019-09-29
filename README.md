@@ -49,9 +49,15 @@ Once you've run that task, open up your Xcode project and take the following ste
 
 1. Click on the root node of the project navigator (will be your project's name).
 2. Open the General tab, and scroll down to the Embedded Binaries section.
-3. Click the plus icon, and navigate to the framework folder. This will be `/path/to/KotlinMobileSharedLibrary/build/xcode-frameworks/MultiplatformProject.framework`
+3. Click the plus icon, and navigate to the framework folder. This will be `/path/to/KotlinMobileSharedLibrary/build/xcode-framework/MultiplatformProject.framework`
 
-Now that we have a reference to the framework, we need to tell xcode where to look to find it. Move over to the Build Settings tab and look for the Framework Search Paths option. Add the path to the framework by putting in ``/path/to/KotlinMobileSharedLibrary/build/xcode-frameworks`.
+After this step, you should see something like this.
+
+![](assets/embedded_binaries.png)
+
+Now that we have a reference to the framework, we need to tell xcode where to look to find it. Move over to the Build Settings tab and look for the Framework Search Paths option. Add the path to the framework by putting in `/path/to/KotlinMobileSharedLibrary/build/xcode-framework`.
+
+![](assets/framework_path.png)
 
 Note that you must run `packForXcode` any time you change the code if you want to see those changes to the framework in your iOS app as well. 
 
